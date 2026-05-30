@@ -1,0 +1,19 @@
+# Build
+bin/
+obj/
+
+# Rider
+.idea/
+
+# Visual Studio
+.vs/
+
+# User Secrets
+secrets.json
+
+# Logs
+*.log
+
+# Windows
+Thumbs.db
+Desktop.ini
