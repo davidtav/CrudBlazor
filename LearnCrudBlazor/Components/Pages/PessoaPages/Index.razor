@@ -1,0 +1,58 @@
+@page "/pessoas"
+@using LearnCrudBlazor.Data
+@using LearnCrudBlazor.Model
+@inject IDbContextFactory<AppDbContext> DbFactory
+
+<h3>Pessoas</h3>
+
+<p>
+    <a class="btn btn-primary" href="/pessoas/create">Create New</a>
+</p>
+
+@if (pessoas is null)
+{
+    <p>Loading...</p>
+}
+else if (pessoas.Count == 0)
+{
+    <p>No records found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Sobrenome</th>
+                <th>Idade</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in pessoas)
+            {
+                <tr>
+                    <td>@item.Nome</td>
+                    <td>@item.Sobrenome</td>
+                    <td>@item.Idade</td>
+                    <td>
+                        <a href="@($"/pessoas/edit/{item.Id}")">Edit</a> |
+                        <a href="@($"/pessoas/details/{item.Id}")">Details</a> |
+                        <a href="@($"/pessoas/delete/{item.Id}")">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Pessoa>? pessoas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        pessoas = await context.Pessoas.ToListAsync();
+    }
+}
+

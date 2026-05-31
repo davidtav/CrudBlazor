@@ -1,0 +1,40 @@
+@page "/pessoas/details/{Id:int}"
+@using LearnCrudBlazor.Data
+@using LearnCrudBlazor.Model
+@inject IDbContextFactory<AppDbContext> DbFactory
+
+<h3>Details Pessoa</h3>
+
+@if (Pessoa is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <dl class="row">
+        <dt class="col-sm-2">Nome</dt>
+        <dd class="col-sm-10">@Pessoa.Nome</dd>
+
+        <dt class="col-sm-2">Sobrenome</dt>
+        <dd class="col-sm-10">@Pessoa.Sobrenome</dd>
+
+        <dt class="col-sm-2">Idade</dt>
+        <dd class="col-sm-10">@Pessoa.Idade</dd>
+    </dl>
+
+    <a class="btn btn-secondary" href="/pessoas">Back to List</a>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Pessoa? Pessoa { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Pessoa = await context.Pessoas.FindAsync(Id);
+    }
+}
+
