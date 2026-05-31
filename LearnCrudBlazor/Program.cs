@@ -1,6 +1,8 @@
 using LearnCrudBlazor;
 using LearnCrudBlazor.Components;
+using LearnCrudBlazor.Data;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddDbContextFactory<AppDbContext>(options =>
+    options.UseInMemoryDatabase("LearnCrudBlazorDb"));
 
 var app = builder.Build();
 
@@ -31,14 +32,5 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-
-// app.MapGet("/db-test", async (ApplicationDbContext db) =>
-// {
-//     var conectado = await db.Database.CanConnectAsync();
-//
-//     return conectado
-//         ? Results.Ok("Banco conectado com sucesso!")
-//         : Results.BadRequest("Falha ao conectar no banco.");
-// });
 
 app.Run();
